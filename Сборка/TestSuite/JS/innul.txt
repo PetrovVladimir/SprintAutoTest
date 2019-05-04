@@ -1,0 +1,29 @@
+function innul() {
+var region = zeros(String(Math.floor((Math.random() * 92) + 1)),2);
+var inspection = zeros(String(Math.floor((Math.random() * 99) + 1)),2);
+var numba = zeros(String(Math.floor((Math.random() * 99999) + 1)),5);
+var rezult = region + inspection + numba;
+var kontr = String(((
+		2*rezult[0] + 4*rezult[1] + 10*rezult[2] +
+		3*rezult[3] + 5*rezult[4] + 9*rezult[5] +
+		4*rezult[6] + 6*rezult[7] + 8*rezult[8]
+	) % 11) % 10);
+kontr == 10 ? kontr = 0: kontr = kontr;
+rezult = rezult + kontr;
+return rezult;
+	}
+	
+function zeros(str, lng) {
+	var factlength = str.length;
+	if (factlength < lng) {
+		for (var i = 0; i < (lng - factlength); i++)
+		{
+			str = '0' + str;
+		}
+	}
+	return str;
+}
+	
+var source = innul();
+
+return source

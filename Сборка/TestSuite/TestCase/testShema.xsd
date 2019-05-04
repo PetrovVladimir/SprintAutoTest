@@ -1,0 +1,228 @@
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.1">
+	
+	<xs:element name="testCase">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="testCaseName" type="xs:string"/>
+				<xs:element name="webPackageName" type="xs:string"/>
+				<xs:element name="actions" type="actionsType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:complexType name="actionsType">
+		<xs:sequence>
+			<xs:element name="action" type="actionType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="actionType">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="orderNumber" type="xs:positiveInteger"/>
+			<xs:element name="runConfiguration" type="runConfigurationType"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="runConfigurationType">
+		<xs:sequence>
+			<xs:element name="formName" type="xs:string"/>
+			<xs:element name="repeatsOnError" type="xs:positiveInteger" minOccurs="0"/>
+			<xs:element name="events" type="eventsType"/>
+			<xs:element name="exceptionBlock" type="eventsType" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="openValidation" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:byte">
+					<xs:enumeration value="1"/>
+					<xs:enumeration value="0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="closeValidation" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:byte">
+					<xs:enumeration value="1"/>
+					<xs:enumeration value="0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	
+	<xs:complexType name="eventBaseType">
+		<xs:sequence>
+			<xs:element name="orderNumber" type="xs:positiveInteger"/>
+		</xs:sequence>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="goToURL"/>
+					<xs:enumeration value="checkElementsVisibility"/>
+					<xs:enumeration value="checkElementsInVisibility"/>
+					<xs:enumeration value="fillingFields"/>
+					<xs:enumeration value="clickElement"/>
+					<xs:enumeration value="dbUpdate"/>
+					<xs:enumeration value="wait"/>
+					<xs:enumeration value="scrollDown"/>
+					<xs:enumeration value="userInput"/>
+					<xs:enumeration value="checkInputValues"/>
+					<xs:enumeration value="checkQueryResultWithUtilityValue"/>
+					<xs:enumeration value="checkFieldsPresenceByQueryResult"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="invertResult" use="optional" default="0">
+			<xs:simpleType>
+				<xs:restriction base="xs:byte">
+					<xs:enumeration value="1"/>
+					<xs:enumeration value="0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="hasExceptionBlock" use="optional" default="0">
+			<xs:simpleType>
+				<xs:restriction base="xs:byte">
+					<xs:enumeration value="1"/>
+					<xs:enumeration value="0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	
+	<xs:complexType name="eventsType">
+		<xs:sequence>
+			<xs:element name="event" type="eventBaseType" maxOccurs="unbounded">
+				<xs:alternative test="@type='goToURL'" type="eventGoToURL"/>
+				<xs:alternative test="@type='checkElementsVisibility'" type="eventCheckElementsVisibility"/>
+				<xs:alternative test="@type='checkElementsInVisibility'" type="eventCheckElementsVisibility"/>
+				<xs:alternative test="@type='fillingFields'" type="eventFillingFields"/>
+				<xs:alternative test="@type='checkInputValues'" type="eventFillingFields"/>
+				<xs:alternative test="@type='clickElement'" type="eventClickElement"/>
+				<xs:alternative test="@TYPE='dbUpdate'" type="eventRequest"/>
+				<xs:alternative test="@type='wait'" type="utilityValueInteger"/>
+				<xs:alternative test="@type='scrollDown'" type="eventClickElement"/>
+				<xs:alternative test="@type='userInput'" type="eventClickElement"/>
+				<xs:alternative test="@type='checkQueryResultWithUtilityValue'" type="eventRequestWithValue"/>
+				<xs:alternative test="@type='checkFieldsPresenceByQueryResult'" type="eventRequestWithValue"/>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- ТИПЫ ДЛЯ EVENTS -->
+	
+	<xs:complexType name="eventGoToURL">
+		<xs:complexContent>
+			<xs:extension base="eventBaseType">
+				<xs:sequence>
+					<xs:element name="url" type="xs:anyURI"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="eventCheckElementsVisibility">
+		<xs:complexContent>
+			<xs:extension base="eventBaseType">
+				<xs:sequence>
+					<xs:element name="fields" type="fieldType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="eventFillingFields">
+		<xs:complexContent>
+			<xs:extension base="eventBaseType">
+				<xs:sequence>
+					<xs:element name="fields" type="fieldTypeWithValue"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="eventClickElement">
+		<xs:complexContent>
+			<xs:extension base="eventBaseType">
+				<xs:sequence>
+					<xs:element name="elementName" type="xs:string"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="eventRequest">
+		<xs:complexContent>
+			<xs:extension base="eventBaseType">
+				<xs:sequence>
+					<xs:element name="dbRequest" type="xs:string"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="utilityValueInteger">
+		<xs:complexContent>
+			<xs:extension base="eventBaseType">
+				<xs:sequence>
+					<xs:element name="utilityValue" type="xs:positiveInteger"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="eventRequestWithValue">
+		<xs:complexContent>
+			<xs:extension base="eventBaseType">
+				<xs:sequence>
+					<xs:element name="dbRequest" type="xs:string"/>
+					<xs:element name="utilityValue" type="xs:string"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<!-- ТИПЫ ДЛЯ EVENTS -->
+	
+	<xs:complexType name="fieldType">
+		<xs:sequence>
+			<xs:element name="field" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="element" type="xs:string"/>
+						<xs:element name="xpath" type="xs:string"/>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="fieldTypeWithValue">
+		<xs:sequence>
+			<xs:element name="field" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="element" type="xs:string"/>
+						<xs:element name="value" type="valueType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="valueType">
+		<xs:complexContent>
+			<xs:extension base="xs:anyType">
+				<xs:attribute name="type" use="optional" default="1">
+					<xs:simpleType>
+						<xs:restriction base="xs:byte">
+							<xs:enumeration value="1"/>
+							<xs:enumeration value="2"/>
+							<xs:enumeration value="3"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+</xs:schema>

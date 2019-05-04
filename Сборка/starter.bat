@@ -1,0 +1,1 @@
+start "AutoTest launcher" %cd%\BuildKit\jdk-12\bin\java.exe -Xmx768M -jar --enable-preview %cd%\BuildKit\SprintAutoTest.jar

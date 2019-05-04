@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE testCase SYSTEM "./TestSuite/TestCase/entities.dtd" []>
+
+<testCase xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="testShema.xsd">
+    <testCaseName>test</testCaseName>
+    <webPackageName>test</webPackageName>
+    <actions>
+        <action>
+            <name>Переход на страничку гугла</name>
+            <orderNumber>10</orderNumber>
+            <runConfiguration openValidation="1" closeValidation="0">
+                <formName>test</formName>
+                <events>
+                    <event type="goToURL">
+                        <orderNumber>10</orderNumber>
+                        <url>&url;</url>
+                    </event>
+                    <event type="fillingFields">
+                        <orderNumber>15</orderNumber>
+                        <fields>
+                            <field>
+                                <element>поисковая_строка</element>
+                                <value>test</value>
+                            </field>
+                        </fields>
+                    </event>
+                    <event type="clickElement">
+                        <orderNumber>20</orderNumber>
+                        <elementName>кнопка_поиск_после_ввода</elementName>
+                    </event>
+                    <event type="wait">
+                        <orderNumber>25</orderNumber>
+                        <utilityValue>7000</utilityValue>
+                    </event>
+                </events>
+            </runConfiguration>
+        </action>
+    </actions>
+    
+</testCase>

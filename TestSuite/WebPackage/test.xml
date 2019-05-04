@@ -1,0 +1,39 @@
+<!DOCTYPE webPackage [
+        <!ELEMENT webPackage (webPackageName, forms)>
+        <!ELEMENT webPackageName (#PCDATA)>
+        <!ELEMENT forms (form+)>
+            <!ELEMENT form (formName, elements+)>
+            <!ELEMENT formName (#PCDATA)>
+            <!ELEMENT elements (element+)>
+                <!ELEMENT element (name, locator)>
+                <!ATTLIST element type (0|1|2|3|4|5|6|7) #REQUIRED>
+                <!ATTLIST element alwaysVisible (0|1) #IMPLIED>
+                <!ELEMENT name (#PCDATA)>
+                <!ELEMENT locator (#PCDATA)>
+                <!ATTLIST locator type (1|2) #IMPLIED>
+        ]>
+
+<webPackage>
+    <webPackageName>test</webPackageName>
+    <forms>
+
+        <form>
+            <formName>test</formName>
+            <elements>
+                <!--*********ПОЛЯ ВВОДА************-->
+                <element type="2" alwaysVisible="1">
+                    <name>поисковая_строка</name>
+                    <locator>.//input[@name="q"]</locator>
+                </element>
+                <element type="1" alwaysVisible="1">
+                    <name>кнопка_поиск</name>
+                    <locator>.//div[@class="FPdoLc VlcLAe"]//input[@value="Поиск в Google"]</locator>
+                </element>
+                <element type="1">
+                    <name>кнопка_поиск_после_ввода</name>
+                    <locator>.//div[@class="VlcLAe"]//input[@value="Поиск в Google"]</locator>
+                </element>
+            </elements>
+        </form>
+    </forms>
+</webPackage>
