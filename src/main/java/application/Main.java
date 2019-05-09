@@ -13,6 +13,9 @@ import javax.xml.stream.XMLInputFactory;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -25,6 +28,7 @@ public class Main {
     public static void main(String[] args){
         setSystemProperties();
         setApplicationProperties();
+        createDirs();
         printHead();
         setTestCaseName(args);
         runApplication();
@@ -191,6 +195,21 @@ public class Main {
         ApplicationConfig.setDefaultTimeOutsForWebDriverWait(Integer.parseInt(properties.getProperty("defaultTimeOutsForWebDriverWait")));
         ApplicationConfig.setLowTimeOutsForWebDriverWait(Integer.parseInt(properties.getProperty("lowTimeOutsForWebDriverWait")));
         ApplicationConfig.setJsFunctions(new File(ApplicationConfig.getJsStorage()));
+    }
+
+    /**
+     * Создание директорий для отчётов
+     */
+    private static void createDirs() {
+        Path reportStoragePath = Paths.get(ApplicationConfig.getReportStorage());
+        Path screenShotStoragePath = Paths.get(ApplicationConfig.getScreenShotStorage());
+        try {
+            Files.createDirectories(reportStoragePath);
+            Files.createDirectories(screenShotStoragePath);
+        } catch (IOException e) {
+            System.out.println("Не удалось создать директории для отчётов");
+            e.printStackTrace();
+        }
     }
 
     static List<File> listFilesFolders(File dir) {
