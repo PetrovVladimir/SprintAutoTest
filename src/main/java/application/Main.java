@@ -208,6 +208,7 @@ public class Main {
             Files.createDirectories(screenShotStoragePath);
         } catch (IOException e) {
             System.out.println("Не удалось создать директории для отчётов");
+            e.printStackTrace();
         }
     }
 
